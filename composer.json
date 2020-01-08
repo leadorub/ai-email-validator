@@ -1,0 +1,19 @@
+{
+  "name": "ai/email-validator",
+  "license": "MIT",
+  "description": "The package validates e-mail addresses without sending confirmations",
+  "authors": [
+    {
+      "name": "Aleksey Ivanov",
+      "email": "ai@proto.uz"
+    }
+  ],
+  "require": {
+    "php": "^7.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "AI\\EmailValidator\\": "src/AI/EmailValidator"
+    }
+  }
+}
