@@ -18,7 +18,7 @@
     $validator = new \AI\EmailValidator\EmailValidator($rules);
 
     // Проверяем
-    $result = $validator->isCorrectEmail($email)
+    $result = $validator->check($email);
 
     if ($result) {
        // проверка пройдена успешно
