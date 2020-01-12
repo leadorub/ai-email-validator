@@ -7,27 +7,31 @@
 
 ```
     $email = 'test@test.com';
-
+    
     // Список правил, по которым будем проверять email
     $rules = [
-        new \AI\EmailValidator\Rules\SimpleRegexpRule(),
-        new \AI\EmailValidator\Rules\MxRecordRule(),
+        "\AI\EmailValidator\Rules\SimpleRegexpRule",
+        "\AI\EmailValidator\Rules\MxRecordRule",
     ];
-
-    // Создаём класс для проверки на валидность
-    $validator = new \AI\EmailValidator\EmailValidator($rules);
-
-    // Проверяем
-    $result = $validator->check($email);
-
-    if ($result) {
-       // проверка пройдена успешно
-    } else {     
-        // проверка не пройдена
+    
+    try {
+        // Создаём класс для проверки на валидность
+        $validator = new \AI\EmailValidator\EmailValidator($rules);
+    
+        // Проверяем
+        $result = $validator->check($email);
+    
+        if ($result) {
+            echo "проверка пройдена успешно" . PHP_EOL;
+        } else {
+            echo "проверка не пройдена" . PHP_EOL;
+        }
+    
+        // Можно вывести отладочную информацию, какое правило и как отработало
+        var_dump($validator->getResultInfo());
+    } catch (InvalidArgumentException $exception) {
+        echo $exception->getMessage() . PHP_EOL;
     }
-
-    // Можно вывести отладочную информацию, какое правило и как отработало
-    var_dump($validator->getResultInfo()); 
 ```
 
 ### 2. Создание своих правил
@@ -61,11 +65,11 @@
 
 ```
     $rules = [
-        new \AI\EmailValidator\Rules\SimpleRegexpRule(),
-        new \AI\EmailValidator\Rules\MxRecordRule(),
+        "\AI\EmailValidator\Rules\SimpleRegexpRule",
+        "\AI\EmailValidator\Rules\MxRecordRule",
 
         // Добавляем свои правила в список правил.
-        new \MyApp\CustomEmailValidatorRules\PhpFilterRule(),
+        "\MyApp\CustomEmailValidatorRules\PhpFilterRule",
         // ...
     ];
 ```

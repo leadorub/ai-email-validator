@@ -4,7 +4,6 @@
 namespace AI\EmailValidator;
 
 use AI\EmailValidator\Rules\Rule;
-use AI\EmailValidator\Rules\SimpleRegexpRule;
 use InvalidArgumentException;
 
 /**
@@ -23,8 +22,8 @@ use InvalidArgumentException;
  * для этого они должны удовлетворять вышеописанным условиям.
  *
  * В базовом пакете реализовано два правила:
- * Проверка простым регулярным выражением - AI\EmailValidator\Rules\SimpleRegexpRule
- * Проверка наличия DNS MX-записи у домена от email-а - AI\EmailValidator\Rules\MxRecordRule
+ * Проверка простым регулярным выражением - \AI\EmailValidator\Rules\SimpleRegexpRule
+ * Проверка наличия DNS MX-записи у домена от email-а - \AI\EmailValidator\Rules\MxRecordRule
  *
  * Чтобы правило применялось для проверки,
  * достаточно передать его в списке правил при создании объекта.
@@ -57,8 +56,9 @@ class EmailValidator
      */
     public function __construct(array $rules = [])
     {
-        $this->rules = count($rules) ? $rules : [new SimpleRegexpRule()];
-        $this->checkRules();
+        $rulesClassNames = count($rules) ? $rules : ["\AI\EmailValidator\Rules\SimpleRegexpRule"];
+        $this->rules = [];
+        $this->checkRules($rulesClassNames);
         $this->resultInfo = [];
     }
 
@@ -100,17 +100,30 @@ class EmailValidator
      * Проверяет, являются ли правила потомками от Rules\Rule.
      * Если какое-то из правил не удовлетворяет тебованиям, выдаёт исключение.
      *
+     * @param array $rulesClassNames
+     *
      * @throws InvalidArgumentException
      */
-    private function checkRules(): void
+    private function checkRules(array $rulesClassNames): void
     {
-        foreach ($this->rules as $rule) {
+        /**
+         * @var string $ruleName
+         */
+        foreach ($rulesClassNames as $ruleName) {
+            if (!class_exists($ruleName)) {
+                throw new InvalidArgumentException("Класс '$ruleName' не найден.");
+            }
+
+            $rule = new $ruleName;
+
             if (!($rule instanceof Rule)) {
                 throw new InvalidArgumentException(
                     "Элементы массива \$rules должны быть потомками класса " .
                     Rule::class
                 );
             }
+
+            $this->rules[] = $rule;
         }
     }
 }

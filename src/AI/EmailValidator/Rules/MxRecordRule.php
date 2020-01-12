@@ -20,7 +20,8 @@ class MxRecordRule extends Rule
      */
     protected function check(string $email): bool
     {
-        $host = array_pop(explode('@', $email));
+        $arEmail = explode('@', $email);
+        $host = array_pop($arEmail);
 
         if ($host == '') {
             return false;

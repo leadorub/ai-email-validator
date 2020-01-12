@@ -2,6 +2,7 @@
   "name": "ai/email-validator",
   "license": "MIT",
   "description": "The package validates e-mail addresses without sending confirmations",
+  "version": "1.0.1",
   "authors": [
     {
       "name": "Aleksey Ivanov",
